@@ -54,7 +54,7 @@ This device listens for distress, detects emergencies, and instantly alerts your
 
 ---
 
-## 📖 How It Works  
+## How It Works  
 1. **Listening Mode**: The device is always on alert, listening for specific keywords or unusual sounds.  
 2. **AI Analysis**: Audio is analyzed in real-time to identify emergencies.  
 3. **Location Tracking**: It fetches your GPS coordinates or estimates location via IP.  
@@ -62,12 +62,12 @@ This device listens for distress, detects emergencies, and instantly alerts your
 
 ---
 
-## ❤️ Why We Built This  
+##  Why We Built This  
 Safety is a basic human right, and technology should make it easier to feel secure. This project is our way of contributing to a world where women feel safer and more empowered, no matter where they are.  
 
 ---
 
-## 🤝 Want to Help?  
+## Want to Help?  
 We’d love to see your contributions! Here’s how you can get involved:  
 1. **Fork** this repository.  
 2. Make your changes and **commit** them.  
@@ -82,10 +82,7 @@ We’d love to see your contributions! Here’s how you can get involved:
 
 ---
 
-## 📬 Contact Us  
-If you have any questions or want to collaborate, feel free to reach out:  
-- **Email**: your_email@example.com  
-- **GitHub Issues**: [Submit an Issue](https://github.com/YourUsername/Women-s-safety-monitoring-wearable-device/issues)  
+
 
 ---  
 
