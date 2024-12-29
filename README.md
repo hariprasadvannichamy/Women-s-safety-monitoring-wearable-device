@@ -1,9 +1,4 @@
-# Women-s-safety-monitoring-wearable-device
-Here’s the updated README without mentions of IoT:  
-
----
-
-# Women's Safety Monitoring Wearable Device  
+Women's Safety Monitoring Wearable Device  
 
 ## What’s This About?  
 Imagine having a companion that’s always there for you, especially in times of need. Our Women's Safety Monitoring Wearable Device is built with AI to provide peace of mind and a helping hand when it matters the most.  
