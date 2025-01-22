@@ -12,7 +12,7 @@
 
 
 
-![image alt](https://github.com/hariprasadvannichamy/Women-s-safety-monitoring-wearable-device/blob/7950d633c7db6f68c53436dfec20c960195c061c/2025-01-22%20(2).jpg)
+![image alt](https://github.com/hariprasadvannichamy/Women-s-safety-monitoring-wearable-device/blob/05430ae4644b696b2ae26e1a5b2d4fcef2f91fd2/2025-01-22%20(1).png)
 
 - **Signal Detection & Recognition**: The AI monitors for distress signals, such as keywords or abnormal sounds, and processes the incoming data to identify potential danger.
 
