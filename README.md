@@ -12,9 +12,5 @@
 
 
 
-
-
-
-![Alt text for the image](images/2025-01-22 (2).jpg)
-
+![Alt text for the image](images/2025-01-22%20(2).jpg)
 
