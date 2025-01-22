@@ -12,5 +12,5 @@
 
 
 
-![Alt text for the image](images/2025-01-22%20(2).jpg)
+![image alt](https://github.com/hariprasadvannichamy/Women-s-safety-monitoring-wearable-device/blob/7950d633c7db6f68c53436dfec20c960195c061c/2025-01-22%20(2).jpg)
 
