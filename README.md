@@ -9,4 +9,4 @@
 - Seamless Operation: Designed for effortless use as a wearable or software-based solution.
 
 ### **Workflow Diagram**
-![Alt text for the image](2025-01-22 (2).jpg)
+![Alt text for the image](images/2025-01-22 (2).jpg)
