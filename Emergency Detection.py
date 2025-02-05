@@ -4,6 +4,7 @@ import pyaudio
 import librosa
 import numpy as np
 import tensorflow as tf
+from tensorflow.lite.python.interpreter import Interpreter
 from twilio.rest import Client
 import requests
 import serial
@@ -15,46 +16,47 @@ import threading
 from opencage.geocoder import OpenCageGeocode
 
 # Twilio account credentials
-TWILIO_ACCOUNT_SID = "xxx"
-TWILIO_AUTH_TOKEN = "abc"
-TWILIO_PHONE_NUMBER = "123456789"
-TO_PHONE_NUMBER = "+91 1234567890"
+TWILIO_ACCOUNT_SID = "xxxxx"
+TWILIO_AUTH_TOKEN = "yyyyy"
+TWILIO_PHONE_NUMBER = "+123456789"
+TO_PHONE_NUMBER = "00000000000"
 
 # Emergency Trigger: Audio Recording Configuration
 AUDIO_FILE_PATH = "emergency_audio.wav"
-RECORD_SECONDS = 15  # Updated recording duration to 15 seconds
+RECORD_SECONDS = 15  # Recording duration in seconds
 FORMAT = pyaudio.paInt16  # Audio format
 CHANNELS = 1  # Mono channel
 RATE = 44100  # Sampling rate
 CHUNK = 1024  # Chunk size
 
-# Load TensorFlow Lite model
-from tensorflow.lite.python.interpreter import Interpreter
-
-interpreter = Interpreter(model_path=r"H:\Women's safety using ai & iot\Ai\audio_classification_model.tflite")
+# Load TensorFlow Lite Model for Audio Classification
+interpreter = Interpreter(model_path=r"H:\\Women's safety using ai & iot\\Ai\\audio_classification_model.tflite")
 interpreter.allocate_tensors()
 
 # Twilio Client Setup
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-# Vosk Model Setup (path updated to the correct one)
-VOSK_MODEL_PATH = r"H:\Women's safety using ai & iot\Ai\vosk-model-en-us-0.42-gigaspeech"
+# OpenCage API setup
+OPENCAGE_API_KEY = '0e993d2166fc4a35b4209e8267341b79'
+geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
+
+# Google Maps API setup
+GOOGLE_MAPS_API_KEY = "AIzaSyASL1s2L-c4oo1Ltx4WEmZuyTDXNOChsJk"
+
+# Vosk Model Setup
+VOSK_MODEL_PATH = r"H:\\Women's safety using ai & iot\\Ai\\vosk-model-en-us-0.42-gigaspeech"
 vosk_model = Model(VOSK_MODEL_PATH)  # Load Vosk model
 recognizer = KaldiRecognizer(vosk_model, 16000)  # Initialize Kaldi Recognizer
 
 # Geolocation Setup
 geolocator = Nominatim(user_agent="emergency_helper")
 
-# OpenCage API setup
-OPENCAGE_API_KEY = '0e993d2166fc4a35b4209e8267341b79'  # Replace with your OpenCage API key
-geocoder = OpenCageGeocode(OPENCAGE_API_KEY)
-
 # Record Audio with dynamic length based on detected keyword
 def record_audio_dynamic(record_seconds=RECORD_SECONDS):
     print(f"Recording emergency audio for {record_seconds} seconds...")
     audio = pyaudio.PyAudio()
 
-    # Open audio stream manually, no context manager
+    # Open audio stream
     stream = audio.open(format=FORMAT,
                         channels=CHANNELS,
                         rate=RATE,
@@ -66,7 +68,7 @@ def record_audio_dynamic(record_seconds=RECORD_SECONDS):
         data = stream.read(CHUNK)
         frames.append(data)
 
-    # Close stream manually
+    # Close stream
     stream.stop_stream()
     stream.close()
     audio.terminate()
@@ -83,18 +85,16 @@ def record_audio_dynamic(record_seconds=RECORD_SECONDS):
 
 # Get Location Details from GPS
 def get_gps_location():
-    gps_port = "COM5"  # Change to your GPS serial port (e.g., /dev/ttyUSB0 on Raspberry Pi)
-    ser = serial.Serial(gps_port, baudrate=115200, timeout=1)
+    gps_port = "/dev/ttyS0"  # Change to your GPS serial port
+    ser = serial.Serial(gps_port, baudrate=9600, timeout=1)
 
-    # Wait for GPS data
     while True:
         data = ser.readline()
         if data.startswith(b"$GPGGA"):
             try:
-                # Parse the NMEA sentence to extract latitude and longitude
                 parts = data.decode().split(',')
-                latitude = float(parts[2])/100
-                longitude = float(parts[4])/100
+                latitude = float(parts[2]) / 100
+                longitude = float(parts[4]) / 100
                 return latitude, longitude
             except Exception as e:
                 print("Error parsing GPS data:", e)
@@ -112,34 +112,19 @@ def get_ip_location():
         print("Error fetching location:", e)
         return None, None
 
-# Get location from OpenCage using latitude and longitude
-def get_location_from_opencage(latitude, longitude):
-    query = f"{latitude}, {longitude}"
-    results = geocoder.reverse_geocode(latitude, longitude)
-
-    if results:
-        # Extract detailed location info
-        location = results[0]['components']
-        print(f"Location details: {location}")
-        formatted_location = f"{location.get('road', '')}, {location.get('city', '')}, {location.get('country', '')}"
-        return formatted_location
-    else:
-        print("No location found")
-        return None
-
 # Try to get real-time location
 def get_location():
     print("Fetching device location...")
 
     # Try GPS first
     try:
-        latitude, longitude = get_gps_location()  # If using a GPS module, call this
+        latitude, longitude = get_gps_location()
         if latitude and longitude:
             return latitude, longitude
     except Exception:
         print("GPS not available, using IP-based location.")
 
-    # Fallback to IP-based geolocation if GPS is not available
+    # Fallback to IP-based geolocation
     latitude, longitude = get_ip_location()
 
     if latitude and longitude:
@@ -152,7 +137,7 @@ def send_emergency_sms(location, audio_file_path):
     print("Sending emergency SMS...")
     map_link = f"https://www.google.com/maps?q={location[0]},{location[1]}"
     message_body = f"Emergency detected! Location: {map_link}. Audio file is saved locally at {audio_file_path}."
-    
+
     message = client.messages.create(
         body=message_body,
         from_=TWILIO_PHONE_NUMBER,
@@ -163,47 +148,30 @@ def send_emergency_sms(location, audio_file_path):
 
 # Preprocess the audio dynamically based on length and extract features
 def preprocess_audio_dynamic(audio_file):
-    # Load the audio file
     audio, sr = librosa.load(audio_file, sr=None)
-    
-    # Adjust the number of MFCCs based on the length of the audio
     duration = librosa.get_duration(y=audio, sr=sr)
-    if duration < 5:
-        n_mfcc = 13  # Use fewer coefficients for short audio
-    elif duration < 20:
-        n_mfcc = 20  # Use more coefficients for medium-length audio
-    else:
-        n_mfcc = 50  # Use the maximum for long audio
-    
-    mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
-    mfcc = mfcc.T  # Shape it to (time_frames, n_mfcc)
+    n_mfcc = min(max(13, 20 if duration < 20 else 50), 50)
 
-    # Flatten the MFCC features into a 1D array
+    mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc).T
     mfcc_flattened = mfcc.flatten()
 
-    # Ensure the input size is consistent with the model input
-    if len(mfcc_flattened) > 50:  # If it's too long, slice it
-        mfcc_flattened = mfcc_flattened[:50]
-    elif len(mfcc_flattened) < 50:  # If it's too short, pad it
-        mfcc_flattened = np.pad(mfcc_flattened, (0, 50 - len(mfcc_flattened)))
+    target_length = 50
+    current_length = len(mfcc_flattened)
+    if current_length < target_length:
+        mfcc_flattened = np.pad(mfcc_flattened, (0, target_length - current_length))
+    else:
+        mfcc_flattened = mfcc_flattened[:target_length]
 
-    # Reshape for model input (1, n_features) format
-    mfcc_flattened = np.expand_dims(mfcc_flattened, axis=0)
-
-    # Ensure the features are of type FLOAT32
-    mfcc_flattened = mfcc_flattened.astype(np.float32)
-    
-    return mfcc_flattened
+    print(f"MFCC shape: {mfcc.shape}, flattened length: {len(mfcc_flattened)}")
+    return np.expand_dims(mfcc_flattened, axis=0).astype(np.float32)
 
 # Predict if an emergency exists based on the audio features
 def predict_audio_features_dynamic(features):
     print("Predicting emergency based on audio features...")
     interpreter.set_tensor(interpreter.get_input_details()[0]['index'], features)
     interpreter.invoke()
-    
     output_data = interpreter.get_tensor(interpreter.get_output_details()[0]['index'])
-    
-    # Adjust prediction threshold dynamically
+
     if output_data > 0.5:
         print("Emergency detected!")
         return True
@@ -214,73 +182,67 @@ def predict_audio_features_dynamic(features):
         print("No emergency detected.")
         return False
 
-# Threaded Audio Recording Function
-def record_audio_threaded(record_seconds=RECORD_SECONDS):
-    audio_file = record_audio_dynamic(record_seconds)
-    return audio_file
+# Helper function to detect emergency keywords with negation handling
+def is_emergency_detected(detected_text):
+    detected_text = detected_text.lower()
+    words = detected_text.split()
+    
+    negation_words = {"not", "no", "don't", "doesn't", "isn't", "aren't", "wasn't", "won't", "can't"}
+    emergency_keywords = {"help", "emergency"}
 
-# Threaded Audio Processing Function
-def process_audio_threaded(audio_file):
-    features = preprocess_audio_dynamic(audio_file)
-    return features
+    for i, word in enumerate(words):
+        if word in emergency_keywords:
+            # Check for negation within the last two words
+            negation_window = words[max(0, i - 2):i]
+            if any(neg_word in negation_window for neg_word in negation_words):
+                print(f"Negated keyword detected in: {' '.join(negation_window)} {word}")
+                return False
+            return True
+    return False
 
-# Threaded Prediction Function
-def predict_audio_threaded(features):
-    emergency_detected = predict_audio_features_dynamic(features)
-    return emergency_detected
-
-# Threaded Location Retrieval Function
-def get_location_threaded():
-    location = get_location()
-    return location
-
-# Threaded SMS Sending Function
-def send_sms_threaded(location, audio_file):
-    send_emergency_sms(location, audio_file)
-
-# Main Function to Detect Keywords and Trigger Emergency
+# Main function to handle keyword detection, emergency classification, and SMS alerts
 def main():
     print("Listening for emergency keyword...")
     while True:
         with sr.Microphone() as source:
-            recognizer = sr.Recognizer()  # Use the speech_recognition.Recognizer here for ambient noise adjustment
-            recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
-            audio_data = recognizer.listen(source)
-
+            recognizer = sr.Recognizer()
+            recognizer.adjust_for_ambient_noise(source)
+            print("Listening...")
             try:
-                # Now use Vosk for speech recognition
+                # Capture audio input
+                audio_data = recognizer.listen(source)
                 detected_text = recognizer.recognize_google(audio_data)
                 print(f"You said: {detected_text}")
 
-                # Check for 'help' or 'emergency'
-                if "help" in detected_text.lower() or "emergency" in detected_text.lower():
+                # Check if an emergency keyword is detected
+                if is_emergency_detected(detected_text):
                     print("Emergency keyword detected!")
 
-                    # Record audio dynamically based on keyword detection
-                    audio_file = record_audio_threaded(record_seconds=15)  # Updated the recording time to 15 seconds
+                    # Record emergency audio
+                    audio_file = record_audio_dynamic(RECORD_SECONDS)
 
-                    # Preprocess the audio to extract features
-                    features = process_audio_threaded(audio_file)
+                    # Process audio and predict emergency
+                    features = preprocess_audio_dynamic(audio_file)
+                    emergency_detected = predict_audio_features_dynamic(features)
 
-                    # Predict if the emergency is detected based on the audio features
-                    emergency_detected = predict_audio_threaded(features)
-
+                    # Handle emergency
                     if emergency_detected:
-                        # Get location (either GPS or fallback geolocation)
-                        location = get_location_threaded()
-
-                        if location and None not in location:
-                            # Send SMS with the location and audio file
-                            send_sms_threaded(location, audio_file)
+                        location = get_location()
+                        if location:
+                            send_emergency_sms(location, audio_file)
+                        else:
+                            print("Unable to determine location.")
                     else:
                         print("No emergency detected based on audio features.")
                 else:
-                    print("No emergency keyword detected. Listening again...")
+                    print("No emergency keyword detected or it was negated. Listening again...")
 
             except sr.UnknownValueError:
                 print("Could not understand the audio. Please try again.")
             except sr.RequestError as e:
                 print(f"Error with speech recognition: {e}")
+            except Exception as e:
+                print(f"Unexpected error occurred: {e}")
 
 if __name__ == "__main__":
     main()
