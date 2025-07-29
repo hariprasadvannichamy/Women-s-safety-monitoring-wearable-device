@@ -44,12 +44,35 @@ The following block diagram illustrates how the wearable safety device functions
    - The alert is logged.
    - The system returns to monitoring state for continuous protection.
 
+## 🧰 Tech Stack
 
-## **Tech Stack**
-#### This project leverages a combination of Artificial Intelligence (AI) to detect distress signals, such as specific keywords or abnormal sounds. Internet of Things (IoT) technologies, including sensors like microphones and GPS modules, enable real-time data collection and communication with emergency contacts.
-#### Accurate geolocation is provided by GPS modules like the u-blox ZED-F9P, ensuring precise location tracking during emergencies. Embedded systems, such as Raspberry Pi, process the incoming data and run AI algorithms. 
-#### Wireless technologies, including GSM, Wi-Fi, and Bluetooth, facilitate the transmission of real-time alerts to predefined emergency contacts. The solution also leverages cloud services (e.g., AWS, Databricks) for scalable data storage, processing, and analytics. 
-#### Python and other programming languages are used for developing machine learning models, software algorithms, and system integration. NoSQL and SQL databases store crucial data securely, while encryption and authentication mechanisms ensure data privacy. Additionally, display modules like 16x2 LCDs visually provide alerts and system status to users, creating a comprehensive and efficient system for women’s safety.
+### 🖥️ Hardware Components
+- **ESP32** – Dual-core microcontroller with WiFi, Bluetooth, and ESP-NOW
+- **MAX30102** – Pulse oximeter and heart rate sensor
+- **INMP441** – MEMS microphone for real-time voice input
+- **Neo-6M GPS Module** – Geolocation tracking with ~4.5m accuracy
+- **LoRa SX1278** – Long-range, low-power communication
+- **ZigBee (CC2530)** – Local mesh networking
+- **SIM800L GSM Module** – SMS-based communication fallback
+- **3.7V Li-ion Battery** – Power supply with onboard charging and protection
+
+### 🧠 AI & Edge ML
+- **TensorFlow Lite** – For on-device keyword spotting (CNN model)
+- **MFCC (Mel-Frequency Cepstral Coefficients)** – Audio feature extraction for voice recognition
+- **Custom CNN** – Lightweight neural network optimized for real-time inference on ESP32
+- **Adaptive Thresholding** – Personalized biometric detection
+
+### 💻 Software & Tools
+- **Arduino IDE** – Firmware development and sensor integration
+- **ESP-IDF** – Low-level development for ESP32
+- **C / C++** – Embedded programming
+- **Python (for training AI model)** – Model training and dataset preparation
+- **Git & GitHub** – Version control and collaboration
+
+### 🔐 Security
+- **AES-128 Encryption** – Secure data transmission and storage
+- **On-device processing** – Privacy-first design with minimal cloud reliance
+- **Two-factor authentication** – For forensic data retrieval
 
 
 ## **Novelty**
