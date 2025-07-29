@@ -21,7 +21,7 @@
 
 The diagram below illustrates the flow of data and decisions in the smart wearable safety device — from voice and biometric detection to alert transmission.
 
-![Workflow Diagram](images/workflow.png)
+![Workflow Diagram](Data Flow Diagram Whiteboard in Dark Yellow Light Yellow Black Monochromatic Style (4).png)
 
 - **Signal Detection & Recognition**: The AI monitors for distress signals, such as keywords or abnormal sounds, and processes the incoming data to identify potential danger.
 
