@@ -15,18 +15,34 @@
 - 🧠 **Edge AI** with on-device CNN for voice recognition (TensorFlow Lite)
 - 🛡️ **User privacy protection** and **stealth mode**
 - 🔋 Power-efficient design with deep sleep mode (ESP32)
-## **Workflow Diagram**
+## 🔄 Workflow Diagram
 
-
-
-The diagram below illustrates the flow of data and decisions in the smart wearable safety device — from voice and biometric detection to alert transmission.
+The following block diagram illustrates how the wearable safety device functions — from real-time data collection to emergency alerting using AI and offline communication protocols.
 
 ![Workflow Diagram](Data%20Flow%20Diagram%20Whiteboard%20in%20Dark%20Yellow%20Light%20Yellow%20Black%20Monochromatic%20Style%20(4).png)
-- **Signal Detection & Recognition**: The AI monitors for distress signals, such as keywords or abnormal sounds, and processes the incoming data to identify potential danger.
 
-- **Alert & Location Transmission**: Once a threat is detected, the IoT system triggers real-time alerts with precise location information, immediately sending them to pre-configured emergency contacts or authorities.
+### 🔍 Workflow Explanation
 
-- **Response & Support**: Emergency contacts or authorities receive the alert and take action, while the system continues to provide support to ensure timely help in critical situations.
+1. **Input: Voice & Health Metrics**  
+   The wearable continuously captures audio (voice commands like "help") and vital signs such as heart rate and SpO₂.
+
+2. **AI Analysis using RISC-V Processor**  
+   - Detects distress through **voice pattern recognition**  
+   - Identifies abnormalities in **health metrics**  
+
+3. **Emergency Detection**  
+   - If an emergency is detected, the system triggers the alert mechanism.  
+   - If no emergency is found, the device continues monitoring passively.
+
+4. **Trigger Alert & GPS Fetch**  
+   - The device retrieves the user's current location using the **GPS module**.
+
+5. **Send Alert via Communication Modules**  
+   - Sends an SMS or alert containing the location via **GSM**, **Wi-Fi**, or **LoRa**, depending on availability.
+
+6. **Log Event & Resume Monitoring**  
+   - The alert is logged.
+   - The system returns to monitoring state for continuous protection.
 
 
 ## **Tech Stack**
