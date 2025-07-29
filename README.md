@@ -3,12 +3,18 @@
 
 
 ## **key Features:**
-- AI-Based Distress Detection: Recognizes distress signals like specific keywords ("help") or unusual sounds.
-- Real-Time Alerts: Sends instant notifications to emergency contacts with precise location details.
-- Geolocation Integration: Ensures accurate tracking of the user's location for a quick response.
-- Customizable Settings: Users can configure emergency contacts and personalize alert triggers.
-- Seamless Operation: Designed for effortless use as a wearable or software-based solution.
-
+- 🔊 **Voice-based emergency detection** (e.g., "help", "emergency")
+- ❤️ **Real-time heart rate & SpO2 monitoring** using MAX30102
+- 📍 **GPS-based location tracking** (Neo-6M)
+- 📡 **Offline communication** using:
+  - LoRa (long-range)
+  - ZigBee (mesh network)
+  - Bluetooth (short-range)
+- 📲 **GSM fallback** via SIM800L for SMS alerts
+- 🔐 **AES-128 encrypted data transmission**
+- 🧠 **Edge AI** with on-device CNN for voice recognition (TensorFlow Lite)
+- 🛡️ **User privacy protection** and **stealth mode**
+- 🔋 Power-efficient design with deep sleep mode (ESP32)
 ## **Workflow Diagram**
 
 
