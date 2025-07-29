@@ -19,7 +19,9 @@
 
 
 
-![image alt](https://github.com/hariprasadvannichamy/Women-s-safety-monitoring-wearable-device/blob/05430ae4644b696b2ae26e1a5b2d4fcef2f91fd2/2025-01-22%20(1).png)
+The diagram below illustrates the flow of data and decisions in the smart wearable safety device — from voice and biometric detection to alert transmission.
+
+![Workflow Diagram](images/workflow.png)
 
 - **Signal Detection & Recognition**: The AI monitors for distress signals, such as keywords or abnormal sounds, and processes the incoming data to identify potential danger.
 
