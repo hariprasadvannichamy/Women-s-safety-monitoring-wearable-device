@@ -1,4 +1,5 @@
-# **Women's Safety Monitoring Wearable Device**
+# **Next-Gen Smart Wearable Device for Women and
+ Children’s Safety Using Edge AI**
 #### This project aims to enhance women’s safety using an AI-powered solution. It combines AI to detect distress signals like "help" or abnormal sounds, with IoT to trigger real-time alerts. These alerts include location details and are sent to emergency contacts or authorities. The goal is to provide a reliable, user-friendly tool that empowers women to get timely help in critical situations, improving personal safety and societal well-being.
 
 ## **key Features:**
