@@ -74,11 +74,35 @@ The following block diagram illustrates how the wearable safety device functions
 - **On-device processing** – Privacy-first design with minimal cloud reliance
 - **Two-factor authentication** – For forensic data retrieval
 
+## 🧪 Novelty of the Project
 
-## **Novelty**
-#### **Novelty** of the Project:
+This project introduces a **next-generation safety wearable** that overcomes the key limitations of existing systems through several innovative features:
 
-This project stands out by integrating **AI** and **IoT** to create a wearable or software-based solution that not only detects distress situations but also triggers immediate, location-specific alerts to emergency contacts or authorities. Unlike existing safety systems, it goes beyond simple alert mechanisms by using **advanced AI models** to recognize subtle distress signals, such as specific keywords or abnormal sounds, ensuring quick and accurate threat detection. Additionally, the combination of **geolocation tracking** and **real-time communication** sets it apart, offering precise location sharing to facilitate swift response. The **cloud-based** backend enables scalable data management and supports continuous improvement through real-time analytics, making it a future-ready, scalable, and sustainable safety solution. This innovative approach ensures that personal safety is enhanced with cutting-edge technology, offering both empowerment and peace of mind in critical situations.
+1. **Offline Functionality Using Edge AI**  
+   - Most safety wearables depend on constant internet or GSM connectivity.  
+   - Our device functions **completely offline**, using **LoRa**, **ZigBee**, and **on-device AI** for emergency detection and communication.
+
+2. **Multi-Trigger Emergency Detection**  
+   - Combines **voice keyword spotting**, **biometric monitoring (SpO₂, heart rate)**, and **manual SOS** into a unified emergency response system.
+
+3. **Lightweight CNN Deployed on ESP32**  
+   - A custom-trained **TensorFlow Lite CNN model** runs directly on the microcontroller, ensuring **real-time detection** without relying on cloud computation.
+
+4. **Hybrid Communication Architecture**  
+   - Uses **LoRa (long-range)**, **ZigBee (mesh)**, **Bluetooth**, and **GSM** for adaptive alert delivery based on connectivity availability.
+
+5. **Privacy-First Design**  
+   - All processing is done **locally on the device**, with **AES-128 encryption** and **volatile memory storage** to ensure user privacy and GDPR compliance.
+
+6. **Stealth & Forensic Features**  
+   - Includes **stealth mode** for discreet SOS activation and **ambient audio recording** (with user consent) to support forensic investigations.
+
+7. **Low Power with Deep Sleep Support**  
+   - Power-optimized design using ESP32 deep sleep and **interrupt-driven wake-up**, allowing **18+ hours active use** and **42+ hours standby**.
+
+---
+
+These combined innovations make this wearable device a **truly standalone, intelligent safety platform**, particularly suited for vulnerable populations in **rural or connectivity-limited regions**.
 
 ## **Conclusion of the Solution:**
 
