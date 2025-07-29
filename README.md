@@ -21,8 +21,7 @@
 
 The diagram below illustrates the flow of data and decisions in the smart wearable safety device — from voice and biometric detection to alert transmission.
 
-![Workflow Diagram](Data Flow Diagram Whiteboard in Dark Yellow Light Yellow Black Monochromatic Style (4).png)
-
+![Workflow Diagram](Data%20Flow%20Diagram%20Whiteboard%20in%20Dark%20Yellow%20Light%20Yellow%20Black%20Monochromatic%20Style%20(4).png)
 - **Signal Detection & Recognition**: The AI monitors for distress signals, such as keywords or abnormal sounds, and processes the incoming data to identify potential danger.
 
 - **Alert & Location Transmission**: Once a threat is detected, the IoT system triggers real-time alerts with precise location information, immediately sending them to pre-configured emergency contacts or authorities.
